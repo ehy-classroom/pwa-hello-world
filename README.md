@@ -1,21 +1,52 @@
-Hier ist eine Anleitung für eine einfache PWA, die nach einem Klick auf einen Button „Hello World!“ anzeigt. Diese Übung ist ideal, um Einsteigern den Unterschied zwischen einer herkömmlichen Website und einer PWA auf mobilen Geräten näherzubringen.
 
-Schritt 1: Projektstruktur erstellen
-Erstelle die folgende Projektstruktur:
+# Einfache Progressive Web App (PWA) Übung
 
-lua
-Code kopieren
-/simple-pwa
+Enno Hyttrek, November 2024
+
+---
+
+### Einführung in Progressive Web Apps (PWA)
+
+Eine **Progressive Web App (PWA)** ist eine Webanwendung, die wie eine native App funktioniert und auf Mobilgeräten installiert werden kann. Im Gegensatz zu herkömmlichen Websites bietet eine PWA zusätzliche Funktionen wie Offline-Betrieb, Schnellzugriff vom Startbildschirm und Vollbildanzeige.
+
+In dieser Übung erstellen wir eine einfache PWA, die durch einen Klick auf einen Button die Nachricht „Hello World!“ anzeigt. Sie wurde speziell für Einsteiger konzipiert, um den Unterschied zwischen einer PWA und einer herkömmlichen Website deutlich zu machen.
+
+### Ziel der Übung
+
+Ziel dieser Übung ist es, die grundlegenden Schritte zum Erstellen einer PWA zu verstehen und den Unterschied zwischen einer mobil optimierten Website und einer installierbaren Web-App aufzuzeigen. Die wichtigsten Bestandteile einer PWA werden dabei in einfacher Form erklärt und umgesetzt.
+
+---
+
+### Struktur und Dateien
+
+Für diese Übung wird folgende Struktur verwendet:
+
+```
+/hello-world-app
 |-- index.html
 |-- style.css
 |-- app.js
 |-- manifest.json
 |-- sw.js
-Schritt 2: HTML-Datei erstellen (index.html)
-In dieser HTML-Datei erstellen wir eine einfache Benutzeroberfläche mit einem Button.
+```
 
-html
-Code kopieren
+#### Dateien im Überblick
+
+1. **index.html**: Die HTML-Struktur der Anwendung mit einem Button, der „Hello World!“ anzeigt.
+2. **style.css**: Das CSS-Design für eine einfache, benutzerfreundliche Oberfläche.
+3. **app.js**: JavaScript für den Button-Klick und die Registrierung des Service Workers.
+4. **manifest.json**: Definiert die PWA-Eigenschaften wie Name, Start-URL und Icons.
+5. **sw.js**: Ein Service Worker, der Offline-Funktionalität ermöglicht.
+
+---
+
+### Schritte zur Umsetzung
+
+#### 1. HTML-Struktur erstellen
+
+Erstelle eine Datei namens `index.html`, die den Grundaufbau der PWA enthält. Füge einen Button hinzu, der später eine Nachricht anzeigt:
+
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -32,11 +63,13 @@ Code kopieren
     <p id="message"></p>
 </body>
 </html>
-Schritt 3: CSS-Datei erstellen (style.css)
-Gestalte die Seite mit ein wenig CSS:
+```
 
-css
-Code kopieren
+#### 2. Stil hinzufügen
+
+Füge in `style.css` ein einfaches Styling hinzu, um die Seite ansprechend zu gestalten:
+
+```css
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -48,16 +81,17 @@ button {
     font-size: 16px;
     cursor: pointer;
 }
-Schritt 4: JavaScript-Datei erstellen (app.js)
-Hier fügen wir eine einfache Klickfunktion hinzu, die „Hello World!“ anzeigt.
+```
 
-javascript
-Code kopieren
+#### 3. JavaScript-Funktionalität
+
+Im `app.js` wird eine Funktion hinzugefügt, die auf den Button-Klick reagiert und „Hello World!“ anzeigt. Außerdem wird der Service Worker registriert:
+
+```javascript
 document.getElementById('helloButton').addEventListener('click', () => {
     document.getElementById('message').innerText = 'Hello World!';
 });
 
-// Service Worker registrieren
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then(() => {
         console.log('Service Worker registriert');
@@ -65,11 +99,13 @@ if ('serviceWorker' in navigator) {
         console.log('Service Worker Registrierung fehlgeschlagen:', error);
     });
 }
-Schritt 5: Manifestdatei erstellen (manifest.json)
-Die manifest.json sorgt dafür, dass die App als PWA erkannt wird. Dies ermöglicht es, die App auf den Home-Bildschirm zu installieren und im Vollbildmodus zu öffnen.
+```
 
-json
-Code kopieren
+#### 4. Manifest-Datei
+
+Die `manifest.json` sorgt dafür, dass die App als PWA erkannt wird. 
+
+```json
 {
     "name": "Simple PWA",
     "short_name": "PWA",
@@ -80,19 +116,24 @@ Code kopieren
     "description": "Eine einfache PWA, um Hello World! anzuzeigen",
     "icons": [
         {
-            "src": "icon.png",
+            "src": "icon-192x192.png",
             "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512x512.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ]
 }
-Hinweis: Erstelle eine icon.png-Datei (192x192 px), die als App-Symbol angezeigt wird.
+```
 
-Schritt 6: Service Worker erstellen (sw.js)
-Der Service Worker macht die App offlinefähig und ermöglicht das Caching. Dieser einfache Service Worker wird die Dateien cachen und später aus dem Cache laden.
+#### 5. Service Worker hinzufügen
 
-javascript
-Code kopieren
+Der `sw.js` dient zum Caching und ermöglicht Offline-Betrieb:
+
+```javascript
 const cacheName = 'pwa-cache-v1';
 const assets = [
     '/',
@@ -105,7 +146,6 @@ const assets = [
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(cacheName).then(cache => {
-            console.log('Dateien werden zwischengespeichert');
             return cache.addAll(assets);
         })
     );
@@ -118,12 +158,17 @@ self.addEventListener('fetch', event => {
         })
     );
 });
-Schritt 7: Unterschied zwischen PWA und mobiler Website verdeutlichen
-Mobil als Website öffnen: Zeige, dass die Seite im Browser wie jede Website geladen wird, aber keine Offline-Funktionalität oder Vollbildansicht hat.
+```
 
-PWA installieren:
+---
 
-Öffne die Seite auf einem Mobilgerät (Android oder iOS).
-Ein „Installieren“-Button oder eine Option zum Hinzufügen auf den Home-Bildschirm erscheint (je nach Browser).
-Installiere die App. Die PWA sollte jetzt im Vollbildmodus und ohne Adressleiste starten und offline funktionieren (aufgrund des Service Workers).
-Dieser Unterschied veranschaulicht den Vorteil von PWAs: Sie können wie native Apps verwendet werden, während sie nur mit Webtechnologien wie HTML, CSS und JS entwickelt wurden.
+### Unterschiede zwischen PWA und herkömmlicher Website
+
+Ein Hauptmerkmal einer PWA ist die Möglichkeit, die Anwendung auf dem Startbildschirm zu installieren. Dadurch wird sie wie eine native App genutzt, kann offline laufen und im Vollbildmodus angezeigt werden. Eine einfache Website hingegen benötigt eine Internetverbindung und wird im Browser mit Adressleiste angezeigt.
+
+---
+
+### Zusammenfassung
+
+In dieser Übung haben wir eine einfache PWA erstellt, die zeigt, wie sich eine PWA von einer typischen Website unterscheidet und welche Vorteile sie auf Mobilgeräten bietet. 
+
