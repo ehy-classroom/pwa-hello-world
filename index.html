@@ -1,177 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta charset="UTF-8" />
-        <title>Progressive Web App (PWA) „Hello World!“</title>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Sample PWA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="style.css">
 
-        <style>
-            /*---------------------
-            RESET
-            ---------------------*/
+  <!-- Link to the PWA manifest -->
+  <link rel="manifest" href="manifest.json">
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+  <!-- Register the service worker -->
+  <script src="assets/js/service-worker-registration.js"></script>
 
-            ul {
-                list-style-type: none;
-            }
+  <!-- Simple styling to show the active button with a border -->
+  <style>
 
-            a {
-                text-decoration: none;
-            }
+  </style>
+</head>
+<body>
+  <h1 id="title">Hello World!</h1>
+  
+  <button onclick="translateText('fr', this)">French</button>
+  <button onclick="translateText('de', this)">German</button>
+  <button onclick="translateText('it', this)">Italian</button>
+  <button onclick="translateText('zh-CN', this)">Chinese</button>
+  <button onclick="translateRandom(this)">Random</button>
+  <button onclick="resetText(this)" class="active">English</button>
 
-            a:hover {
-                text-decoration: underline;
-            }
-
-            /*---------------------
-            LAYOUT
-            ---------------------*/
-
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6,
-            p,
-            ul,
-            ol,
-            figure,
-            pre{
-                margin-bottom: 1em;
-            }
-
-            .container {
-                max-width: 960px;
-                margin: 0 auto;
-                padding: 8px 1em;
-            }
-
-            main {
-                min-height: 70vh;
-            }
-            
-            pre {
-                padding: 1em;
-                border-radius: 1em;
-            }
-
-            ul,ol {
-                padding: 0 1em;
-            }
-            
-            /*---------------------
-            TYPOGRAPHY
-            ---------------------*/
-
-            body {
-                font-family: "Inter", sans-serif;
-                font-weight: 200;
-                line-height: 1.5;
-            }
-            
-            /*---------------------
-            COLOR
-            ---------------------*/
-
-            /**-----
-            Color Vars
-            -----**/
-
-            :root {
-                /*Grey Scale*/
-                --color-grey-cool-100: hsl(200, 8%, 89%);
-                --color-grey-cool-200: hsl(200, 8%, 76%);
-                --color-grey-cool-300: hsl(200, 8%, 55%);
-                --color-grey-cool-400: hsl(200, 8%, 34%);
-                --color-grey-cool-500: hsl(200, 8%, 13%);
-
-                /*Accent*/
-                --color-accent-a: hsl(30, 94%, 55%);
-                --color-accent-b: hsl(89, 55%, 55%);
-            }
-
-            /**-----
-            Color Backgrounds
-            -----**/
-
-            body {
-                background: var(--color-grey-cool-500);
-            }
-
-            header {
-                background: var(--color-grey-cool-300);
-            }
-
-            main {
-                background: #fff;
-            }
-            
-            pre {
-               background: var(--color-grey-cool-400); 
-            }
-
-            /**-----
-            Color Type
-            -----**/
-
-            body {
-                color: var(--color-grey-cool-100);
-            }
-
-            main,
-            main a {
-                color: var(--color-grey-cool-400);
-            }
-
-            main a:hover,
-            main a:active {
-                color: var(--color-accent-b);
-            }
-            
-              pre {
-               color: var(--color-grey-cool-200); 
-            }
-
-
-        </style>
-    </head>
-    <body>
-        <!-- Container for rendered Markdown content -->
-        <main>
-            <div class="container" id="markdown-content"></div>
-            <div class="container">
-                <h2>Test App</h2>
-                <p><a href="hello-world-app/">App in Browser starten</a></p>
-            </div>
-        </main>
-
-        <!-- Showdown library (via CDN) -->
-        <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
-
-        <!-- JavaScript to fetch and render the Markdown file -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                // Initialize Showdown converter
-                const converter = new showdown.Converter();
-
-                // Fetch the Markdown file
-                fetch("README.md")
-                    .then((response) => response.text())
-                    .then((markdown) => {
-                        // Convert Markdown to HTML
-                        const html = converter.makeHtml(markdown);
-
-                        // Insert converted HTML into the container
-                        document.getElementById("markdown-content").innerHTML = html;
-                    })
-                    .catch((error) => console.error("Error loading Markdown file:", error));
-            });
-        </script>
-    </body>
+  <script src="assets/js/translation.js"></script>
+</body>
 </html>

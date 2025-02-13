@@ -1,0 +1,151 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "englishName": "English",
+      "germanName": "Englisch",
+      "nativeName": "English",
+      "translation": "Hello World!"
+    },
+    {
+      "code": "de",
+      "englishName": "German",
+      "germanName": "Deutsch",
+      "nativeName": "Deutsch",
+      "translation": "Hallo Welt!"
+    },
+    {
+      "code": "fr",
+      "englishName": "French",
+      "germanName": "Französisch",
+      "nativeName": "Français",
+      "translation": "Bonjour le monde!"
+    },
+    {
+      "code": "es",
+      "englishName": "Spanish",
+      "germanName": "Spanisch",
+      "nativeName": "Español",
+      "translation": "¡Hola Mundo!"
+    },
+    {
+      "code": "zh-CN",
+      "englishName": "Chinese",
+      "germanName": "Chinesisch",
+      "nativeName": "中文",
+      "translation": "你好，世界！"
+    },
+    {
+      "code": "ar",
+      "englishName": "Arabic",
+      "germanName": "Arabisch",
+      "nativeName": "العربية",
+      "translation": "مرحباً بالعالم!"
+    },
+    {
+      "code": "ru",
+      "englishName": "Russian",
+      "germanName": "Russisch",
+      "nativeName": "Русский",
+      "translation": "Привет, мир!"
+    },
+    {
+      "code": "pt",
+      "englishName": "Portuguese",
+      "germanName": "Portugiesisch",
+      "nativeName": "Português",
+      "translation": "Olá Mundo!"
+    },
+    {
+      "code": "ja",
+      "englishName": "Japanese",
+      "germanName": "Japanisch",
+      "nativeName": "日本語",
+      "translation": "こんにちは世界！"
+    },
+    {
+      "code": "hi",
+      "englishName": "Hindi",
+      "germanName": "Hindi",
+      "nativeName": "हिन्दी",
+      "translation": "नमस्ते दुनिया!"
+    },
+    {
+      "code": "he",
+      "englishName": "Hebrew",
+      "germanName": "Hebräisch",
+      "nativeName": "עברית",
+      "translation": "שלום עולם!"
+    },
+    {
+      "code": "el",
+      "englishName": "Greek",
+      "germanName": "Griechisch",
+      "nativeName": "Ελληνικά",
+      "translation": "Γειά σου Κόσμε!"
+    },
+    {
+      "code": "sw",
+      "englishName": "Swahili",
+      "germanName": "Swahili",
+      "nativeName": "Kiswahili",
+      "translation": "Habari Dunia!"
+    },
+    {
+      "code": "zu",
+      "englishName": "Zulu",
+      "germanName": "Zulu",
+      "nativeName": "IsiZulu",
+      "translation": "Sawubona Mhlaba!"
+    },
+    {
+      "code": "yo",
+      "englishName": "Yoruba",
+      "germanName": "Yoruba",
+      "nativeName": "Èdè Yorùbá",
+      "translation": "Bawo ni Ayé!"
+    },
+    {
+      "code": "sa",
+      "englishName": "Sanskrit",
+      "germanName": "Sanskrit",
+      "nativeName": "संस्कृतम्",
+      "translation": "नमस्ते विश्व!"
+    },
+    {
+      "code": "mi",
+      "englishName": "Maori",
+      "germanName": "Maori",
+      "nativeName": "Māori",
+      "translation": "Kia ora ao!"
+    },
+    {
+      "code": "th",
+      "englishName": "Thai",
+      "germanName": "Thailändisch",
+      "nativeName": "ไทย",
+      "translation": "สวัสดีชาวโลก!"
+    },
+    {
+      "code": "ht",
+      "englishName": "Haitian Creole",
+      "germanName": "Haïtisches Kreol",
+      "nativeName": "Kreyòl Ayisyen",
+      "translation": "Bonjou Mond!"
+    },
+    {
+      "code": "to",
+      "englishName": "Tongan",
+      "germanName": "Tongaisch",
+      "nativeName": "Lea Faka-Tonga",
+      "translation": "Mālō e lelei māmani!"
+    },
+    {
+      "code": "it",
+      "englishName": "Italian",
+      "germanName": "Italienisch",
+      "nativeName": "Italiano",
+      "translation": "Ciao mondo!"
+    }
+  ]
+}

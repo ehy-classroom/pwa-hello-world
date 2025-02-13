@@ -1,0 +1,13 @@
+/*---------------------
+Progressive Web App (PWA) Hello World!
+Author: Enno Hyttrek (with a lot of help by Github Copilot/ChatGPT)
+Version: 2.0
+---------------------*/
+
+body {
+    background: hsl(200,42%,76%);
+}
+
+    button.active {
+      border: 2px solid #F00; /* red border for accent */
+    }
