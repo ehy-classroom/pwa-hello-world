@@ -1,174 +1,241 @@
+# Progressive Web App (PWA) „Hello World!“
 
-# Einfache Progressive Web App (PWA) Übung
-
-Enno Hyttrek, November 2024
-
----
-
-### Einführung in Progressive Web Apps (PWA)
-
-Eine **Progressive Web App (PWA)** ist eine Webanwendung, die wie eine native App funktioniert und auf Mobilgeräten installiert werden kann. Im Gegensatz zu herkömmlichen Websites bietet eine PWA zusätzliche Funktionen wie Offline-Betrieb, Schnellzugriff vom Startbildschirm und Vollbildanzeige.
-
-In dieser Übung erstellen wir eine einfache PWA, die durch einen Klick auf einen Button die Nachricht „Hello World!“ anzeigt. Sie wurde speziell für Einsteiger konzipiert, um den Unterschied zwischen einer PWA und einer herkömmlichen Website deutlich zu machen.
-
-### Ziel der Übung
-
-Ziel dieser Übung ist es, die grundlegenden Schritte zum Erstellen einer PWA zu verstehen und den Unterschied zwischen einer mobil optimierten Website und einer installierbaren Web-App aufzuzeigen. Die wichtigsten Bestandteile einer PWA werden dabei in einfacher Form erklärt und umgesetzt.
+Diese einfache Progressive Web App (PWA) demonstriert das Anzeigen von „Hello World!” in verschiedenen Sprachen, die Offline-Verfügbarkeit durch einen Service Worker und das Installieren im Browser.
 
 ---
 
-### Struktur und Dateien
+## Was ist eine PWA?
 
-Für diese Übung wird folgende Struktur verwendet:
-
-```
-/hello-world-app
-|-- index.html
-|-- style.css
-|-- app.js
-|-- manifest.json
-|-- sw.js
-```
-
-#### Dateien im Überblick
-
-1. **index.html**: Die HTML-Struktur der Anwendung mit einem Button, der „Hello World!“ anzeigt.
-2. **style.css**: Das CSS-Design für eine einfache, benutzerfreundliche Oberfläche.
-3. **app.js**: JavaScript für den Button-Klick und die Registrierung des Service Workers.
-4. **manifest.json**: Definiert die PWA-Eigenschaften wie Name, Start-URL und Icons.
-5. **sw.js**: Ein Service Worker, der Offline-Funktionalität ermöglicht.
+Eine **Progressive Web App** verbindet Eigenschaften moderner Websites (z.B. Responsiveness) mit Funktionen nativ installierbarer Apps (Offline-Fähigkeit, Home-Bildschirm-Icon). Sie ist über eine URL erreichbar, lässt sich aber dank Manifest und Service Worker auch am Desktop oder Mobilgerät wie eine App installieren.
 
 ---
 
-### Schritte zur Umsetzung
+## Struktur der App
 
-#### 1. HTML-Struktur erstellen
-
-Erstelle eine Datei namens `index.html`, die den Grundaufbau der PWA enthält. Füge einen Button hinzu, der später eine Nachricht anzeigt:
-
-```html
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple PWA</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <script defer src="app.js"></script>
-</head>
-<body>
-    <h1>Willkommen zur einfachen PWA</h1>
-    <button id="helloButton">Klicke hier!</button>
-    <p id="message"></p>
-</body>
-</html>
+```plaintext
+pwa-hello-world/
+├── index.html
+├── assets/
+│   └── js/
+│       ├── service-worker-registration.js
+│       └── translation.js
+├── service-worker.js
+├── manifest.json
+└── languages.json
 ```
 
-#### 2. Stil hinzufügen
+---
 
-Füge in `style.css` ein einfaches Styling hinzu, um die Seite ansprechend zu gestalten:
+## Aufbau und Funktionalität
 
-```css
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-}
+Die App besteht aus folgenden Dateien:
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-```
+1. **`index.html`**  
+   Enthält die Grundstruktur mit Buttons zur Übersetzung und einem Skriptverweis auf die Service-Worker-Registrierung.  
+   ```html
+   <!-- Auszug aus index.html -->
+   <h1 id="title">Hello World!</h1>
+   <button onclick="translateText('fr', this)">French</button>
+   <button onclick="translateText('de', this)">German</button>
+   <button onclick="translateText('it', this)">Italian</button>
+   <button onclick="translateText('zh-CN', this)">Chinese</button>
+   <button onclick="translateRandom(this)">Random</button>
+   <button onclick="resetText(this)" class="active">English</button>
+   <script src="assets/js/translation.js"></script>
+   ```
 
-#### 3. JavaScript-Funktionalität
+2. **`assets/js/service-worker-registration.js`**  
+   Enthält die Registrierung des Service Workers.  
+   ```javascript
+   // Auszug aus service-worker-registration.js
+   if ('serviceWorker' in navigator) {
+     window.addEventListener('load', () => {
+       navigator.serviceWorker.register('/service-worker.js').then(
+         () => console.log('Service Worker registered.'),
+         err => console.log('Service Worker registration failed:', err)
+       );
+     });
+   }
+   ```
 
-Im `app.js` wird eine Funktion hinzugefügt, die auf den Button-Klick reagiert und „Hello World!“ anzeigt. Außerdem wird der Service Worker registriert:
+3. **`assets/js/translation.js`**  
+   Enthält die Logik zur Übersetzung des Textes „Hello World!” in verschiedene Sprachen.  
+   ```javascript
+   // Auszug aus translation.js
+   async function translateText(langCode, button) {
+     highlightButton(button);
+     try {
+       const response = await fetch('languages.json');
+       const data = await response.json();
+       const translation = data.languages.find(lang => lang.code === langCode)?.translation;
+       if (translation) {
+         document.getElementById("title").innerText = translation;
+       } else {
+         console.error("Translation not found for language code:", langCode);
+       }
+     } catch (error) {
+       console.error("Translation error:", error);
+     }
+   }
+   ```
 
-```javascript
-document.getElementById('helloButton').addEventListener('click', () => {
-    document.getElementById('message').innerText = 'Hello World!';
-});
+4. **`service-worker.js`**  
+   Enthält den Service Worker, der die App offline verfügbar macht.  
+   ```javascript
+   // Auszug aus service-worker.js
+   const CACHE_NAME = 'pwa-sample-cache-v1';
+   const urlsToCache = [
+     '/',
+     '/index.html',
+     '/manifest.json'
+   ];
+   
+   self.addEventListener('install', event => {
+     event.waitUntil(
+       caches.open(CACHE_NAME)
+         .then(cache => cache.addAll(urlsToCache))
+         .catch(err => console.error('Cache add failed:', err))
+     );
+   });
+   
+   self.addEventListener('fetch', event => {
+     event.respondWith(
+       caches.match(event.request)
+         .then(response => response || fetch(event.request))
+     );
+   });
+   ```
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(() => {
-        console.log('Service Worker registriert');
-    }).catch(error => {
-        console.log('Service Worker Registrierung fehlgeschlagen:', error);
-    });
-}
-```
+5. **`manifest.json`**  
+   Enthält die Metadaten der PWA.  
+   ```json
+   {
+     "name": "Sample PWA",
+     "short_name": "SamplePWA",
+     "start_url": ".",
+     "display": "standalone",
+     "background_color": "#ffffff",
+     "theme_color": "#000000",
+     "icons": [
+       {
+         "src": "icon-192x192.png",
+         "sizes": "192x192",
+         "type": "image/png"
+       },
+       {
+         "src": "icon-512x512.png",
+         "sizes": "512x512",
+         "type": "image/png"
+       }
+     ]
+   }
+   ```
 
-#### 4. Manifest-Datei
+6. **`languages.json`**  
+   Enthält die Übersetzungen für „Hello World!” in verschiedenen Sprachen. Beispiel:
+   ```json
+   {
+     "code": "en",
+     "englishName": "English",
+     "germanName": "Englisch",
+     "nativeName": "English",
+     "translation": "Hello World!"
+   }
+   ```
 
-Die `manifest.json` sorgt dafür, dass die App als PWA erkannt wird. 
+---
+
+## Wichtige Konzepte einer PWA
+
+### `manifest.json`
+
+Die `manifest.json` Datei enthält Metadaten, die dem Browser helfen, die PWA zu erkennen und zu installieren. Sie definiert unter anderem den Namen der App, das Start-URL, das Erscheinungsbild (z.B. Hintergrund- und Themenfarbe) und die Icons. Hier ein Beispiel:
 
 ```json
 {
-    "name": "Simple PWA",
-    "short_name": "PWA",
-    "start_url": "/index.html",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#000000",
-    "description": "Eine einfache PWA, um Hello World! anzuzeigen",
-    "icons": [
-        {
-            "src": "icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+  "name": "Sample PWA",
+  "short_name": "SamplePWA",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
 ```
 
-#### 5. Service Worker hinzufügen
+### `service-worker.js`
 
-Der `sw.js` dient zum Caching und ermöglicht Offline-Betrieb:
+Der Service Worker ist ein Skript, das im Hintergrund läuft und Netzwerk-Anfragen abfängt, um die App offline verfügbar zu machen. Er kann Ressourcen cachen und bei Bedarf aus dem Cache liefern. Hier ein Beispiel:
 
 ```javascript
-const cacheName = 'pwa-cache-v1';
-const assets = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/app.js',
-    '/manifest.json'
+const CACHE_NAME = 'pwa-sample-cache-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(cacheName).then(cache => {
-            return cache.addAll(assets);
-        })
-    );
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+      .catch(err => console.error('Cache add failed:', err))
+  );
 });
 
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-            return cachedResponse || fetch(event.request);
-        })
-    );
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      })
+  );
 });
 ```
 
 ---
 
-### Unterschiede zwischen PWA und herkömmlicher Website
+## Installation der Web App
 
-Ein Hauptmerkmal einer PWA ist die Möglichkeit, die Anwendung auf dem Startbildschirm zu installieren. Dadurch wird sie wie eine native App genutzt, kann offline laufen und im Vollbildmodus angezeigt werden. Eine einfache Website hingegen benötigt eine Internetverbindung und wird im Browser mit Adressleiste angezeigt.
+### Chrome
 
----
+1. Öffnen Sie die Web App in Google Chrome.
+2. Klicken Sie auf das Menü-Symbol (drei Punkte) in der oberen rechten Ecke des Browsers.
+3. Wählen Sie „Installieren” oder „Zum Startbildschirm hinzufügen”.
+4. Folgen Sie den Anweisungen, um die App zu installieren.
 
-### Zusammenfassung
+### Opera
 
-In dieser Übung haben wir eine einfache PWA erstellt, die zeigt, wie sich eine PWA von einer typischen Website unterscheidet und welche Vorteile sie auf Mobilgeräten bietet. 
+1. Öffnen Sie die Web App in Opera.
+2. Klicken Sie auf das Menü-Symbol (drei Punkte) in der oberen rechten Ecke des Browsers.
+3. Wählen Sie „Installieren” oder „Zum Startbildschirm hinzufügen”.
+4. Folgen Sie den Anweisungen, um die App zu installieren.
+
+### Edge
+
+1. Öffnen Sie die Web App in Microsoft Edge.
+2. Klicken Sie auf das Menü-Symbol (drei Punkte) in der oberen rechten Ecke des Browsers.
+3. Wählen Sie „Apps” und dann „Diese Seite als App installieren”.
+4. Folgen Sie den Anweisungen, um die App zu installieren.
+
+### Safari
+
+1. Öffnen Sie die Web App in Safari auf Ihrem iPhone oder iPad.
+2. Tippen Sie auf das Teilen-Symbol (Quadrat mit Pfeil nach oben) am unteren Bildschirmrand.
+3. Wählen Sie „Zum Home-Bildschirm”.
+4. Folgen Sie den Anweisungen, um die App zu installieren.
 
